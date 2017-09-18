@@ -1,62 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Media;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace CgLogListener
 {
-    public static class PlaySoundHelper
-    {
-        public static bool PlaySound()
-        {
-            Settings settings = Settings.GetInstance();
-
-            if (!settings.PlaySound)
-            {
-                return true;
-            }
-            else
-            {
-                const string wavName = "sound.wav";
-                string wavPath = Path.Combine(Directory.GetCurrentDirectory(), wavName);
-                Stream wavStream = null;
-
-                try
-                {
-                    if (!File.Exists(wavPath))
-                    {
-                        // set default wav
-                        wavStream = Resource.sound;
-                    }
-                    else
-                    {
-                        wavStream = File.Open(wavPath, FileMode.Open);
-                    }
-
-                    SoundPlayer player = new SoundPlayer
-                    {
-                        Stream = wavStream
-                    };
-
-                    player.Play();
-                    return true;
-                }
-                catch { return false; }
-                finally
-                {
-                    if (wavStream != null)
-                    {
-                        using (wavStream) { }
-                    }
-                }
-            }
-        }
-    }
-
     public class CgLogListenerSettingCheckBox : CheckBox
     {
         public string NameInSetting { get; set; }
