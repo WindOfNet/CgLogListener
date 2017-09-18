@@ -23,11 +23,12 @@ namespace CgLogListener
             this.ImeMode = ImeMode.OnHalf;
             this.Icon = Resource.icon;
             this.notifyIcon.Icon = Resource.icon;
+
+            settings = Settings.GetInstance();
         }
 
         private void frmMain_Load(object sender, System.EventArgs e)
         {
-            settings = new Settings();
             if (!settings.Load())
             {
                 // load conf err         
@@ -61,16 +62,30 @@ namespace CgLogListener
 
             bindWatcher();
 
+            // set playsound check
+            cgLogListenerSettingCheckBox1.Checked = settings.PlaySound;
+            
+            // set default tips check
+            foreach (CgLogListenerCheckBox chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
+            {
+                settings.DefaultTips.TryGetValue(chk.NameInSetting, out bool enable);
+                chk.Checked = enable;
+            }
+
+            // set custom tips items
             settings.CustomTips
-                    .Where(s => !string.IsNullOrEmpty(s))
-                    .ToList()
-                    .ForEach(s => cgNotyListBox.Items.Add(s));
+                    .ForEach(s =>
+                    {
+                        if (!string.IsNullOrEmpty(s))
+                        {
+                            CgLogListenerListBox.Items.Add(s);
+                        }
+                    });
         }
 
         private void btnSelectLogPath_Click(object sender, System.EventArgs e)
         {
-            string cgLogPath = null;
-            if (selectLogPath(out cgLogPath))
+            if (selectLogPath(out string cgLogPath))
             {
                 settings.CgLogPath = cgLogPath;
                 settings.ReWrite();
@@ -96,44 +111,48 @@ namespace CgLogListener
         {
             txtCgLogPath.Text = settings.CgLogPath;
             watcher = new CgLogHandler(settings.CgLogPath);
-            watcher.OnNewLog += Watcher_OnNewLog;
+            watcher.OnNewLog += watcher_OnNewLog;
         }
 
-        void Watcher_OnNewLog(string log)
-            => panel1.Controls.OfType<INotifyMessage>()
-                              .ToList()
-                              .ForEach(n => n.Notify(log));
+        void watcher_OnNewLog(string log)
+        {
+            foreach (INotifyMessage n in panel1.Controls.OfType<INotifyMessage>())
+            {
+                if (n.Notify(log))
+                {
+                    // break if one of trigger
+                    break;
+                }
+            }
+        }
 
         private void btnAddCus_Click(object sender, System.EventArgs e)
         {
-            string value;
-            if (FormPrompt.ShowDialog(this, out value) != DialogResult.OK)
+            if (FormPrompt.ShowDialog(this, out string value) != DialogResult.OK ||
+                string.IsNullOrEmpty(value))
             {
                 return;
             }
 
-            if (value.Contains("="))
+            if (value.Contains("=") ||
+                value.Contains(","))
             {
-                MessageBox.Show(this, "不支援加入 = 符號", "fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "不支援加入 = 或 , ", "fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
-            cgNotyListBox.Items.Add(value);
-            settings.CustomTips.Add(value);
-            settings.ReWrite();
+            
+            CgLogListenerListBox.AddListen(value);
         }
 
         private void btnDelCus_Click(object sender, EventArgs e)
         {
-            if (cgNotyListBox.SelectedIndex < 0)
+            if (CgLogListenerListBox.SelectedIndex < 0)
             {
                 return;
             }
 
-            string selectItem = (string)cgNotyListBox.SelectedItem;
-            settings.CustomTips.Remove(selectItem);
-            cgNotyListBox.Items.Remove(selectItem);
-            settings.ReWrite();
+            string selectItem = (string)CgLogListenerListBox.SelectedItem;
+            CgLogListenerListBox.RemoveListen(selectItem);
         }
 
         #region notifyIcon, window minsize and exit ...
@@ -185,5 +204,10 @@ namespace CgLogListener
             }
         }
         #endregion
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/WindOfNet/CgLogListener");
+        }
     }
 }
