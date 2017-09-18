@@ -18,6 +18,8 @@ namespace CgLogListener
         public FormMain()
         {
             InitializeComponent();
+
+            // fix IME bug
             this.ImeMode = ImeMode.OnHalf;
             this.Icon = Resource.icon;
             this.notifyIcon.Icon = Resource.icon;
@@ -45,6 +47,16 @@ namespace CgLogListener
 
                 settings.CgLogPath = cgLogPath;
                 settings.ReWrite();
+            }
+
+            if (!Directory.Exists(settings.CgLogPath))
+            {
+                // the dir path invalid, set to default and exit
+                settings.CgLogPath = string.Empty;
+                settings.ReWrite();
+                MessageBox.Show(this, "設定檔路徑錯誤, 請重新啟動", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
+                return;
             }
 
             bindWatcher();
@@ -112,8 +124,9 @@ namespace CgLogListener
                 return;
             }
 
-            settings.CustomTips.Remove((string)cgNotyListBox.SelectedItem);
-            cgNotyListBox.Items.RemoveAt(cgNotyListBox.SelectedIndex);
+            string selectItem = (string)cgNotyListBox.SelectedItem;
+            settings.CustomTips.Remove(selectItem);
+            cgNotyListBox.Items.Remove(selectItem);
             settings.ReWrite();
         }
 
