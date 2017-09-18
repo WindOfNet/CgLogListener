@@ -112,6 +112,12 @@ namespace CgLogListener
                 return;
             }
 
+            if (value.Contains("="))
+            {
+                MessageBox.Show(this, "不支援加入 = 符號", "fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             cgNotyListBox.Items.Add(value);
             settings.CustomTips.Add(value);
             settings.ReWrite();
