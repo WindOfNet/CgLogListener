@@ -14,7 +14,8 @@ namespace CgLogListener
         string settingsFilePath = null;
         string customizeFilePath = null;
 
-        public bool PlaySound { get; private set; }
+        public bool PlaySound { get; set; }
+        public int SoundVol { get; set; }
         public string CgLogPath { get; set; }
         public Dictionary<string, bool> DefaultTips { get; private set; }
         public List<string> CustomizeTips { get; private set; }
@@ -86,6 +87,9 @@ namespace CgLogListener
                         case "PlaySound":
                             PlaySound = int.Parse(conf[1]) == 1;
                             break;
+                        case "SoundVol":
+                            SoundVol = int.Parse(conf[1]);
+                            break;                           
                         default:
                             DefaultTips[conf[0]] = int.Parse(conf[1]) == 1;
                             break;
@@ -117,6 +121,7 @@ namespace CgLogListener
             {
                 sw.WriteLine($"CgLogPath=");
                 sw.WriteLine($"PlaySound=1");
+                sw.WriteLine($"SoundVol=5");
             }
         }
 
@@ -126,7 +131,8 @@ namespace CgLogListener
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 sw.WriteLine($"CgLogPath={CgLogPath}");
-                sw.WriteLine($"PlaySound={(PlaySound ? 1 : 0)}");                
+                sw.WriteLine($"PlaySound={(PlaySound ? 1 : 0)}");
+                sw.WriteLine($"SoundVol={SoundVol}");
                 foreach (KeyValuePair<string, bool> kv in DefaultTips)
                 {
                     sw.WriteLine($"{kv.Key}={(kv.Value ? 1 : 0)}");

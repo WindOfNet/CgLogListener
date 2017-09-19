@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -67,6 +68,9 @@ namespace CgLogListener
             // set playsound check
             cgLogListenerSettingCheckBox1.Checked = settings.PlaySound;
 
+            // set playsound vol
+            trackBar1.Value = settings.SoundVol;
+
             // set default tips check
             foreach (CgLogListenerCheckBox chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
             {
@@ -80,9 +84,38 @@ namespace CgLogListener
                     {
                         if (!string.IsNullOrEmpty(s))
                         {
-                            CgLogListenerListBox.Items.Add(s);
+                            cgLogListenerListBox.Items.Add(s);
                         }
                     });
+
+
+            cgLogListenerCheckBox1.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
+            cgLogListenerCheckBox2.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
+            cgLogListenerCheckBox3.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
+            cgLogListenerCheckBox4.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
+            cgLogListenerCheckBox5.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
+            cgLogListenerCheckBox6.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
+            cgLogListenerSettingCheckBox1.CheckedChanged += CgLogListenerSettingCheckBox1_CheckedChanged;
+            trackBar1.ValueChanged += TrackBar1_ValueChanged;
+        }
+
+        private void CgLogListenerCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            CgLogListenerSettingCheckBox chk = (CgLogListenerSettingCheckBox)sender;
+            settings.DefaultTips[chk.NameInSetting] = chk.Checked;
+            settings.ReWrite();
+        }
+
+        private void CgLogListenerSettingCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            settings.PlaySound = cgLogListenerSettingCheckBox1.Checked;
+            settings.ReWrite();
+        }
+
+        private void TrackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            settings.SoundVol = trackBar1.Value;
+            settings.ReWrite();
         }
 
         private void btnSelectLogPath_Click(object sender, System.EventArgs e)
@@ -144,21 +177,14 @@ namespace CgLogListener
                             wavStream = File.Open(wavPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                         }
 
-                        SoundPlayer player = new SoundPlayer
-                        {
-                            Stream = wavStream
-                        };
-
-                        player.Play();
+                        WaveStream wave = new WaveFileReader(wavStream);
+                        WaveChannel32 volumeStream = new WaveChannel32(wave);
+                        WaveOutEvent waveOut = new WaveOutEvent();
+                        waveOut.Volume = (float)this.Invoke((Func<float>)delegate { return trackBar1.Value / 10f; });
+                        waveOut.Init(volumeStream);
+                        waveOut.Play();
                     }
                     catch { }
-                    finally
-                    {
-                        if (wavStream != null)
-                        {
-                            using (wavStream) { }
-                        }
-                    }
 
                     // break if one of trigger
                     break;
@@ -174,18 +200,18 @@ namespace CgLogListener
                 return;
             }
 
-            CgLogListenerListBox.AddListen(value);
+            cgLogListenerListBox.AddListen(value);
         }
 
         private void btnDelCus_Click(object sender, EventArgs e)
         {
-            if (CgLogListenerListBox.SelectedIndex < 0)
+            if (cgLogListenerListBox.SelectedIndex < 0)
             {
                 return;
             }
 
-            string selectItem = (string)CgLogListenerListBox.SelectedItem;
-            CgLogListenerListBox.RemoveListen(selectItem);
+            string selectItem = (string)cgLogListenerListBox.SelectedItem;
+            cgLogListenerListBox.RemoveListen(selectItem);
         }
 
         #region notifyIcon, window minsize and exit ...
@@ -242,5 +268,7 @@ namespace CgLogListener
         {
             System.Diagnostics.Process.Start("https://github.com/WindOfNet/CgLogListener");
         }
+
+
     }
 }

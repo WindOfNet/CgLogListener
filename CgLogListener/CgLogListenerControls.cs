@@ -10,14 +10,6 @@ namespace CgLogListener
     public class CgLogListenerSettingCheckBox : CheckBox
     {
         public string NameInSetting { get; set; }
-
-        protected override void OnClick(EventArgs e)
-        {
-            Settings settings = Settings.GetInstance();
-            settings.DefaultTips[NameInSetting] = !this.Checked;
-            settings.ReWrite();
-            base.OnClick(e);
-        }
     }
     
     public class CgLogListenerCheckBox : CgLogListenerSettingCheckBox, INotifyMessage
@@ -49,6 +41,11 @@ namespace CgLogListener
 
             return false;
         }
+    }
+
+    public class CgLogListenerTrackBar : TrackBar
+    {
+        public string NameInSetting { get; set; }
     }
 
     public class CgLogListenerListBox : ListBox, INotifyMessage
