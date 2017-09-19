@@ -25,7 +25,6 @@ namespace CgLogListener
         ToolTip tooltip;
         string toolTipText = null; // for form design
 
-        public NotifyIcon NotifyIcon { get; set; }
         public string RegexPattern { get; set; }
         public string ToolTipText
         {
@@ -45,9 +44,6 @@ namespace CgLogListener
                 value &&
                 Regex.IsMatch(message, RegexPattern))
             {
-                NotifyIcon?.ShowBalloonTip(10000, NotifyIcon.BalloonTipTitle, message, ToolTipIcon.None);
-                PlaySoundHelper.PlaySound();
-
                 return true;
             }
 
@@ -82,9 +78,6 @@ namespace CgLogListener
             {
                 if (message.Contains(s))
                 {
-                    NotifyIcon?.ShowBalloonTip(10000, NotifyIcon.BalloonTipTitle, message, ToolTipIcon.None);
-                    PlaySoundHelper.PlaySound();
-
                     return true;
                 }
             }

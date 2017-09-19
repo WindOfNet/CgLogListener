@@ -160,7 +160,6 @@
             this.cgLogListenerCheckBox5.Location = new System.Drawing.Point(2, 99);
             this.cgLogListenerCheckBox5.Name = "cgLogListenerCheckBox5";
             this.cgLogListenerCheckBox5.NameInSetting = "Sell";
-            this.cgLogListenerCheckBox5.NotifyIcon = this.notifyIcon;
             this.cgLogListenerCheckBox5.RegexPattern = "您順利賣掉了一個.*，(收入|獲得).*魔幣！";
             this.cgLogListenerCheckBox5.Size = new System.Drawing.Size(119, 19);
             this.cgLogListenerCheckBox5.TabIndex = 8;
@@ -174,7 +173,6 @@
             this.CgLogListenerCheckBox4.Location = new System.Drawing.Point(2, 74);
             this.CgLogListenerCheckBox4.Name = "CgLogListenerCheckBox4";
             this.CgLogListenerCheckBox4.NameInSetting = "PlayerJoin";
-            this.CgLogListenerCheckBox4.NotifyIcon = this.notifyIcon;
             this.CgLogListenerCheckBox4.RegexPattern = "加入了(你|您)的隊伍。";
             this.CgLogListenerCheckBox4.Size = new System.Drawing.Size(134, 19);
             this.CgLogListenerCheckBox4.TabIndex = 8;
@@ -188,7 +186,6 @@
             this.CgLogListenerCheckBox3.Location = new System.Drawing.Point(2, 49);
             this.CgLogListenerCheckBox3.Name = "CgLogListenerCheckBox3";
             this.CgLogListenerCheckBox3.NameInSetting = "MP0";
-            this.CgLogListenerCheckBox3.NotifyIcon = this.notifyIcon;
             this.CgLogListenerCheckBox3.RegexPattern = "魔力不足。";
             this.CgLogListenerCheckBox3.Size = new System.Drawing.Size(119, 19);
             this.CgLogListenerCheckBox3.TabIndex = 8;
@@ -257,7 +254,6 @@
             this.CgLogListenerCheckBox2.Margin = new System.Windows.Forms.Padding(2);
             this.CgLogListenerCheckBox2.Name = "CgLogListenerCheckBox2";
             this.CgLogListenerCheckBox2.NameInSetting = "ItemFull";
-            this.CgLogListenerCheckBox2.NotifyIcon = this.notifyIcon;
             this.CgLogListenerCheckBox2.RegexPattern = "物品欄沒有空位。";
             this.CgLogListenerCheckBox2.Size = new System.Drawing.Size(104, 19);
             this.CgLogListenerCheckBox2.TabIndex = 1;
@@ -272,7 +268,6 @@
             this.CgLogListenerCheckBox1.Margin = new System.Windows.Forms.Padding(2);
             this.CgLogListenerCheckBox1.Name = "CgLogListenerCheckBox1";
             this.CgLogListenerCheckBox1.NameInSetting = "Health";
-            this.CgLogListenerCheckBox1.NotifyIcon = this.notifyIcon;
             this.CgLogListenerCheckBox1.RegexPattern = "在工作時不小心受傷了。";
             this.CgLogListenerCheckBox1.Size = new System.Drawing.Size(119, 19);
             this.CgLogListenerCheckBox1.TabIndex = 1;
@@ -297,7 +292,6 @@
             this.cgLogListenerCheckBox6.Location = new System.Drawing.Point(2, 124);
             this.cgLogListenerCheckBox6.Name = "cgLogListenerCheckBox6";
             this.cgLogListenerCheckBox6.NameInSetting = "ReMaze";
-            this.cgLogListenerCheckBox6.NotifyIcon = this.notifyIcon;
             this.cgLogListenerCheckBox6.RegexPattern = "你感覺到一股不可思議的力量，而『.*』好像快(要?)消失了。";
             this.cgLogListenerCheckBox6.Size = new System.Drawing.Size(119, 19);
             this.cgLogListenerCheckBox6.TabIndex = 8;

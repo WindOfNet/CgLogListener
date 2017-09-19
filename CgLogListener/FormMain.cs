@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Windows.Forms;
 
@@ -36,7 +37,7 @@ namespace CgLogListener
                 this.Close();
                 return;
             }
-            
+
             if (string.IsNullOrEmpty(settings.CgLogPath))
             {
                 string cgLogPath = settings.CgLogPath;
@@ -65,7 +66,7 @@ namespace CgLogListener
 
             // set playsound check
             cgLogListenerSettingCheckBox1.Checked = settings.PlaySound;
-            
+
             // set default tips check
             foreach (CgLogListenerCheckBox chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
             {
@@ -121,6 +122,44 @@ namespace CgLogListener
             {
                 if (n.Notify(log))
                 {
+                    notifyIcon.ShowBalloonTip(10000, notifyIcon.BalloonTipTitle, log, ToolTipIcon.None);
+
+                    if (!settings.PlaySound)
+                    {
+                        return;
+                    }
+                    const string wavName = "sound.wav";
+                    string wavPath = Path.Combine(Directory.GetCurrentDirectory(), wavName);
+                    Stream wavStream = null;
+
+                    try
+                    {
+                        if (!File.Exists(wavPath))
+                        {
+                            // set default wav
+                            wavStream = Resource.sound;
+                        }
+                        else
+                        {
+                            wavStream = File.Open(wavPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        }
+
+                        SoundPlayer player = new SoundPlayer
+                        {
+                            Stream = wavStream
+                        };
+
+                        player.Play();
+                    }
+                    catch { }
+                    finally
+                    {
+                        if (wavStream != null)
+                        {
+                            using (wavStream) { }
+                        }
+                    }
+
                     // break if one of trigger
                     break;
                 }
@@ -134,7 +173,7 @@ namespace CgLogListener
             {
                 return;
             }
-            
+
             CgLogListenerListBox.AddListen(value);
         }
 

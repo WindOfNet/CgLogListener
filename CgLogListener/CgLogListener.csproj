@@ -74,7 +74,6 @@
     <Compile Include="FormPrompt.Designer.cs">
       <DependentUpon>FormPrompt.cs</DependentUpon>
     </Compile>
-    <Compile Include="PlaySoundHelper.cs" />
     <Compile Include="Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
