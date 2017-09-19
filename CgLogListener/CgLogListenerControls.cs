@@ -80,7 +80,7 @@ namespace CgLogListener
             Settings settings = Settings.GetInstance();
             foreach (string s in settings.CustomTips)
             {
-                if (Regex.IsMatch(message, s))
+                if (message.Contains(s))
                 {
                     NotifyIcon?.ShowBalloonTip(10000, NotifyIcon.BalloonTipTitle, message, ToolTipIcon.None);
                     PlaySoundHelper.PlaySound();
