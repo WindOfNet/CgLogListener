@@ -11,13 +11,13 @@ namespace CgLogListener
         static object locker = new object();
         static Settings instance;
 
-        string settingFilePath = null;
+        string settingsFilePath = null;
+        string customizeFilePath = null;
 
-        public bool IsLoad { get; private set; }
         public bool PlaySound { get; private set; }
         public string CgLogPath { get; set; }
         public Dictionary<string, bool> DefaultTips { get; private set; }
-        public List<string> CustomTips { get; private set; }
+        public List<string> CustomizeTips { get; private set; }
 
         Settings() { }
 
@@ -37,55 +37,77 @@ namespace CgLogListener
         public bool Load(string settingFilePath = null)
         {
             const string settingsFileName = "settings.conf";
+            const string customizeFileName = "customize.conf";
             DefaultTips = new Dictionary<string, bool>();
-            CustomTips = new List<string>();
+            CustomizeTips = new List<string>();
 
-            this.settingFilePath = settingFilePath ?? Path.Combine(Directory.GetCurrentDirectory(), settingsFileName);
-            if (!File.Exists(this.settingFilePath))
+            this.settingsFilePath = settingFilePath ?? Path.Combine(Directory.GetCurrentDirectory(), settingsFileName);
+            this.customizeFilePath = Path.Combine(Directory.GetCurrentDirectory(), customizeFileName);
+
+            if (!File.Exists(this.settingsFilePath))
             {
                 // gen new conf file
-                genConfig(this.settingFilePath);
+                genConfig(this.settingsFilePath);
             }
 
             try
             {
-                using (FileStream fs = new FileStream(this.settingFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                using (StreamReader sr = new StreamReader(fs))
-                {
-                    string line = sr.ReadLine();
-                    while (!string.IsNullOrEmpty(line))
-                    {
-                        string[] conf = line.Split('=');
-                        if (conf.Length != 2)
-                        {
-                            line = sr.ReadLine();
-                            continue;
-                        }
+                // load default settings
+                loadDefaultSettings();
 
-                        switch (conf[0])
-                        {
-                            case "CgLogPath":
-                                CgLogPath = conf[1];
-                                break;
-                            case "PlaySound":
-                                PlaySound = int.Parse(conf[1]) == 1;
-                                break;
-                            case "CustomTips":
-                                CustomTips.AddRange(conf[1].Split(','));
-                                break;
-                            default:
-                                DefaultTips[conf[0]] = int.Parse(conf[1]) == 1;
-                                break;
-                        }
+                // load customize tips
+                loadCustomizeTips();
 
-                        line = sr.ReadLine();
-                    }
-
-                    IsLoad = true;
-                    return true;
-                }
+                return true;
             }
             catch { return false; }
+        }
+
+        private void loadDefaultSettings()
+        {
+            using (FileStream fs = new FileStream(this.settingsFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (StreamReader sr = new StreamReader(fs))
+            {
+                string line = sr.ReadLine();
+                while (!string.IsNullOrEmpty(line))
+                {
+                    string[] conf = line.Split('=');
+                    if (conf.Length != 2)
+                    {
+                        line = sr.ReadLine();
+                        continue;
+                    }
+
+                    switch (conf[0])
+                    {
+                        case "CgLogPath":
+                            CgLogPath = conf[1];
+                            break;
+                        case "PlaySound":
+                            PlaySound = int.Parse(conf[1]) == 1;
+                            break;
+                        default:
+                            DefaultTips[conf[0]] = int.Parse(conf[1]) == 1;
+                            break;
+                    }
+
+                    line = sr.ReadLine();
+                }
+            }
+        }
+        
+        private void loadCustomizeTips()
+        {
+            using (FileStream fs = new FileStream(this.customizeFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+            using (StreamReader sr = new StreamReader(fs))
+            {
+                string line = sr.ReadLine();
+                while (!string.IsNullOrEmpty(line))
+                {
+                    CustomizeTips.Add(line);
+                    line = sr.ReadLine();
+                }
+            }
         }
 
         void genConfig(string filePath)
@@ -95,21 +117,28 @@ namespace CgLogListener
             {
                 sw.WriteLine($"CgLogPath=");
                 sw.WriteLine($"PlaySound=1");
-                sw.WriteLine($"CustomTips=發現(野生一級|１級怪)");
             }
         }
 
         public void ReWrite()
         {
-            using (FileStream fs = new FileStream(settingFilePath, FileMode.Create, FileAccess.ReadWrite))
+            using (FileStream fs = new FileStream(settingsFilePath, FileMode.Create, FileAccess.ReadWrite))
             using (StreamWriter sw = new StreamWriter(fs))
             {
                 sw.WriteLine($"CgLogPath={CgLogPath}");
-                sw.WriteLine($"PlaySound={(PlaySound ? 1 : 0)}");
-                sw.WriteLine($"CustomTips={string.Join(",", CustomTips)}");
+                sw.WriteLine($"PlaySound={(PlaySound ? 1 : 0)}");                
                 foreach (KeyValuePair<string, bool> kv in DefaultTips)
                 {
                     sw.WriteLine($"{kv.Key}={(kv.Value ? 1 : 0)}");
+                }
+            }
+
+            using (FileStream fs = new FileStream(customizeFilePath, FileMode.Create, FileAccess.ReadWrite))
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                foreach (string s in CustomizeTips)
+                {
+                    sw.WriteLine(s);
                 }
             }
         }

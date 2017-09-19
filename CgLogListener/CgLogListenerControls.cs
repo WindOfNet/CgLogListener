@@ -62,7 +62,7 @@ namespace CgLogListener
         public void AddListen(string rule)
         {
             Settings settings = Settings.GetInstance();
-            settings.CustomTips.Add(rule);
+            settings.CustomizeTips.Add(rule);
             settings.ReWrite();
             this.Items.Add(rule);
         }
@@ -70,7 +70,7 @@ namespace CgLogListener
         public void RemoveListen(string rule)
         {
             Settings settings = Settings.GetInstance();
-            settings.CustomTips.Remove(rule);
+            settings.CustomizeTips.Remove(rule);
             settings.ReWrite();
             this.Items.Remove(rule);
         }
@@ -78,7 +78,7 @@ namespace CgLogListener
         public bool Notify(string message)
         {
             Settings settings = Settings.GetInstance();
-            foreach (string s in settings.CustomTips)
+            foreach (string s in settings.CustomizeTips)
             {
                 if (message.Contains(s))
                 {

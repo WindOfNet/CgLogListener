@@ -34,6 +34,7 @@ namespace CgLogListener
                 // load conf err         
                 MessageBox.Show(this, "讀取設定失敗", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
+                return;
             }
             
             if (string.IsNullOrEmpty(settings.CgLogPath))
@@ -73,7 +74,7 @@ namespace CgLogListener
             }
 
             // set custom tips items
-            settings.CustomTips
+            settings.CustomizeTips
                     .ForEach(s =>
                     {
                         if (!string.IsNullOrEmpty(s))
@@ -131,13 +132,6 @@ namespace CgLogListener
             if (FormPrompt.ShowDialog(this, out string value) != DialogResult.OK ||
                 string.IsNullOrEmpty(value))
             {
-                return;
-            }
-
-            if (value.Contains("=") ||
-                value.Contains(","))
-            {
-                MessageBox.Show(this, "不支援加入 = 或 , ", "fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             
