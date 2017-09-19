@@ -10,6 +10,7 @@ namespace CgLogListener
     public class CgLogHandler
     {
         string logPath;
+        string latestLog;
         public delegate void onNewLog(string message);
         public event onNewLog OnNewLog;
 
@@ -48,7 +49,17 @@ namespace CgLogListener
 
                     byte[] native = stack.ToArray();
                     byte[] b = Encoding.Convert(Encoding.Default, Encoding.UTF8, native);
-                    OnNewLog?.Invoke(Encoding.UTF8.GetString(b).Replace("", " "));
+                    string log = Encoding.UTF8.GetString(b).Replace("", " ");
+                    /* 
+                     * 多視窗時可能會連續偵測到相同的句子 (並且時間會一樣)
+                     * 所以會有一個變數去紀錄最後的 log, 並拿來比對當次的 log
+                     * 若 not equals 才會觸發事件
+                     */
+                    if (!log.Equals(latestLog))
+                    {
+                        latestLog = log;
+                        OnNewLog?.Invoke(log);
+                    }
                 }
             }
             catch { }
