@@ -39,7 +39,7 @@
             this.txtCgLogPath = new System.Windows.Forms.TextBox();
             this.btnSelectLogPath = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.trackBar1 = new CgLogListener.CgLogListenerTrackBar();
+            this.cgLogListenerTrackBar = new CgLogListener.CgLogListenerTrackBar();
             this.cgLogListenerSettingCheckBox1 = new CgLogListener.CgLogListenerSettingCheckBox();
             this.cgLogListenerCheckBox6 = new CgLogListener.CgLogListenerCheckBox();
             this.cgLogListenerCheckBox5 = new CgLogListener.CgLogListenerCheckBox();
@@ -55,7 +55,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.notifyIconContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cgLogListenerTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // notifyIcon
@@ -127,7 +127,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.trackBar1);
+            this.panel1.Controls.Add(this.cgLogListenerTrackBar);
             this.panel1.Controls.Add(this.cgLogListenerSettingCheckBox1);
             this.panel1.Controls.Add(this.cgLogListenerCheckBox6);
             this.panel1.Controls.Add(this.cgLogListenerCheckBox5);
@@ -147,14 +147,14 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.AutoSize = false;
-            this.trackBar1.LargeChange = 1;
-            this.trackBar1.Location = new System.Drawing.Point(2, 197);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.NameInSetting = "SoundVol";
-            this.trackBar1.Size = new System.Drawing.Size(108, 27);
-            this.trackBar1.TabIndex = 12;
-            this.trackBar1.Value = 5;
+            this.cgLogListenerTrackBar.AutoSize = false;
+            this.cgLogListenerTrackBar.LargeChange = 1;
+            this.cgLogListenerTrackBar.Location = new System.Drawing.Point(2, 197);
+            this.cgLogListenerTrackBar.Name = "trackBar1";
+            this.cgLogListenerTrackBar.NameInSetting = "SoundVol";
+            this.cgLogListenerTrackBar.Size = new System.Drawing.Size(108, 27);
+            this.cgLogListenerTrackBar.TabIndex = 12;
+            this.cgLogListenerTrackBar.Value = 5;
             // 
             // cgLogListenerSettingCheckBox1
             // 
@@ -335,7 +335,7 @@
             this.notifyIconContextMenu.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cgLogListenerTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -365,7 +365,7 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private CgLogListenerSettingCheckBox cgLogListenerSettingCheckBox1;
         private CgLogListenerCheckBox cgLogListenerCheckBox6;
-        private CgLogListenerTrackBar trackBar1;
+        private CgLogListenerTrackBar cgLogListenerTrackBar;
     }
 }
 

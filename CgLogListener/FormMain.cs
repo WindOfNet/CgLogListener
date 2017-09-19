@@ -69,7 +69,7 @@ namespace CgLogListener
             cgLogListenerSettingCheckBox1.Checked = settings.PlaySound;
 
             // set playsound vol
-            trackBar1.Value = settings.SoundVol;
+            cgLogListenerTrackBar.Value = settings.SoundVol;
 
             // set default tips check
             foreach (CgLogListenerCheckBox chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
@@ -87,8 +87,7 @@ namespace CgLogListener
                             cgLogListenerListBox.Items.Add(s);
                         }
                     });
-
-
+            
             cgLogListenerCheckBox1.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerCheckBox2.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerCheckBox3.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
@@ -96,7 +95,7 @@ namespace CgLogListener
             cgLogListenerCheckBox5.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerCheckBox6.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerSettingCheckBox1.CheckedChanged += CgLogListenerSettingCheckBox1_CheckedChanged;
-            trackBar1.ValueChanged += TrackBar1_ValueChanged;
+            cgLogListenerTrackBar.ValueChanged += CgLogListenerTrackBar_ValueChanged;
         }
 
         private void CgLogListenerCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -112,9 +111,9 @@ namespace CgLogListener
             settings.ReWrite();
         }
 
-        private void TrackBar1_ValueChanged(object sender, EventArgs e)
+        private void CgLogListenerTrackBar_ValueChanged(object sender, EventArgs e)
         {
-            settings.SoundVol = trackBar1.Value;
+            settings.SoundVol = cgLogListenerTrackBar.Value;
             settings.ReWrite();
         }
 
@@ -180,7 +179,7 @@ namespace CgLogListener
                         WaveStream wave = new WaveFileReader(wavStream);
                         WaveChannel32 volumeStream = new WaveChannel32(wave);
                         WaveOutEvent waveOut = new WaveOutEvent();
-                        waveOut.Volume = (float)this.Invoke((Func<float>)delegate { return trackBar1.Value / 10f; });
+                        waveOut.Volume = (float)this.Invoke((Func<float>)delegate { return cgLogListenerTrackBar.Value / 10f; });
                         waveOut.Init(volumeStream);
                         waveOut.Play();
                     }
