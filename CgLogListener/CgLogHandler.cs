@@ -17,15 +17,35 @@ namespace CgLogListener
         public CgLogHandler(string path)
         {
             if (string.IsNullOrEmpty(path) ||
-                !Directory.Exists(path))
+                !Directory.Exists(path) ||
+                !ValidationPath(path))
                 throw new ArgumentException();
 
-            logPath = path;
-            FileSystemWatcher fsw = new FileSystemWatcher(path);
+            logPath = Path.Combine(path, "Log");
+            FileSystemWatcher fsw = new FileSystemWatcher(logPath);
             fsw.Filter = "*.txt";
             fsw.NotifyFilter = NotifyFilters.LastWrite;
             fsw.EnableRaisingEvents = true;
             fsw.Changed += Fsw_Changed;
+        }
+
+        public static bool ValidationPath(string path)
+        {
+            try
+            {
+                if (!Directory.Exists(path))
+                {
+                    return false;
+                }
+                                
+                if (Directory.Exists(Path.Combine(path, "Log")))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch { return false; }
         }
 
         private void Fsw_Changed(object sender, FileSystemEventArgs e)
@@ -44,7 +64,7 @@ namespace CgLogListener
                         if (tmp == '\n')
                             break;
                         else
-                            stack.Push((byte)tmp);                        
+                            stack.Push((byte)tmp);
                     }
 
                     byte[] native = stack.ToArray();

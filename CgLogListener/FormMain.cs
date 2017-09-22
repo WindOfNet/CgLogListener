@@ -53,7 +53,8 @@ namespace CgLogListener
                 settings.ReWrite();
             }
 
-            if (!Directory.Exists(settings.CgLogPath))
+            if (!Directory.Exists(settings.CgLogPath) ||
+                !CgLogHandler.ValidationPath(settings.CgLogPath))
             {
                 // the dir path invalid, set to default and exit
                 settings.CgLogPath = string.Empty;
@@ -87,7 +88,7 @@ namespace CgLogListener
                             cgLogListenerListBox.Items.Add(s);
                         }
                     });
-            
+
             cgLogListenerCheckBox1.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerCheckBox2.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerCheckBox3.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
@@ -129,16 +130,35 @@ namespace CgLogListener
 
         bool selectLogPath(out string path)
         {
+            path = null;
+            DialogResult result = DialogResult.No;
             FolderBrowserDialog dialog = new FolderBrowserDialog()
             {
                 ShowNewFolderButton = false,
-                Description = "請選擇放置魔力寶貝Log的目錄"
+                Description = @"請選擇魔力寶貝的目錄 (e.g. D:\CrossGate\)"
             };
 
-            DialogResult result = dialog.ShowDialog(this);
-            path = dialog.SelectedPath;
+            while (true)
+            {
+                result = dialog.ShowDialog(this);
 
-            return result == DialogResult.OK;
+                if (result == DialogResult.Cancel)
+                {
+                    return false;
+                }
+
+                if (result == DialogResult.OK)
+                {
+                    if (!CgLogHandler.ValidationPath(dialog.SelectedPath))
+                    {
+                        MessageBox.Show(this, "請選擇魔力寶貝的目錄", "錯誤的路徑", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        continue;
+                    }
+
+                    path = dialog.SelectedPath;
+                    return true;
+                }
+            }
         }
 
         void bindWatcher()
