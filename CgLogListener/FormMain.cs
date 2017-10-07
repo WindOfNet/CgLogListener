@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CgLogListener
@@ -16,6 +17,8 @@ namespace CgLogListener
     {
         Settings settings;
         CgLogHandler watcher;
+        WaveChannel32 volumeStream;
+        WaveOutEvent waveOut;
 
         public FormMain()
         {
@@ -27,6 +30,26 @@ namespace CgLogListener
             this.notifyIcon.Icon = Resource.icon;
 
             settings = Settings.GetInstance();
+
+            const string wavName = "sound.wav";
+            string wavPath = Path.Combine(Directory.GetCurrentDirectory(), wavName);
+            Stream wavStream = null;
+
+            if (!File.Exists(wavPath))
+            {
+                // set default wav
+                wavStream = Resource.sound;
+            }
+            else
+            {
+                wavStream = File.Open(wavPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            }
+
+            WaveFileReader wave = new WaveFileReader(wavStream);
+            volumeStream = new WaveChannel32(wave) { PadWithZeroes = false };
+
+            waveOut = new WaveOutEvent();
+            waveOut.Init(volumeStream);
         }
 
         private void frmMain_Load(object sender, System.EventArgs e)
@@ -180,30 +203,17 @@ namespace CgLogListener
                     {
                         return;
                     }
-                    const string wavName = "sound.wav";
-                    string wavPath = Path.Combine(Directory.GetCurrentDirectory(), wavName);
-                    Stream wavStream = null;
 
-                    try
+                    GC.Collect();
+
+                    if (waveOut.PlaybackState == PlaybackState.Playing)
                     {
-                        if (!File.Exists(wavPath))
-                        {
-                            // set default wav
-                            wavStream = Resource.sound;
-                        }
-                        else
-                        {
-                            wavStream = File.Open(wavPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                        }
-
-                        WaveStream wave = new WaveFileReader(wavStream);
-                        WaveChannel32 volumeStream = new WaveChannel32(wave);
-                        WaveOutEvent waveOut = new WaveOutEvent();
-                        waveOut.Volume = (float)this.Invoke((Func<float>)delegate { return cgLogListenerTrackBar.Value / 10f; });
-                        waveOut.Init(volumeStream);
-                        waveOut.Play();
+                        waveOut.Stop();
                     }
-                    catch { }
+
+                    volumeStream.Position = 0;
+                    waveOut.Volume = (float)this.Invoke((Func<float>)delegate { return cgLogListenerTrackBar.Value / 10f; });
+                    waveOut.Play();
 
                     // break if one of trigger
                     break;
@@ -281,13 +291,18 @@ namespace CgLogListener
                 this.Visible = false;
             }
         }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            notifyIcon.Dispose();
+            waveOut?.Dispose();
+        }
+
         #endregion
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/WindOfNet/CgLogListener");
         }
-
-
     }
 }
