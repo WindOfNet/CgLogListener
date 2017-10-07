@@ -4,7 +4,7 @@ CgLogListener
 
 主要為監視Log資料夾, 並依據內建(或自訂)的關鍵字提醒警示  
 
-![demo](https://i.imgur.com/lqBpspb.png)  
+![demo](https://i.imgur.com/28FDH9D.png)  
 
 ![demo](https://i.imgur.com/xT5ZAwe.png)
 
