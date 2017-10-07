@@ -77,31 +77,31 @@
             this.toolExit});
             this.notifyIconContextMenu.Name = "notifyIconContextMenu";
             this.notifyIconContextMenu.ShowImageMargin = false;
-            this.notifyIconContextMenu.Size = new System.Drawing.Size(99, 82);
+            this.notifyIconContextMenu.Size = new System.Drawing.Size(86, 76);
             // 
             // toolOpen
             // 
             this.toolOpen.Name = "toolOpen";
-            this.toolOpen.Size = new System.Drawing.Size(98, 24);
+            this.toolOpen.Size = new System.Drawing.Size(85, 22);
             this.toolOpen.Text = "開啟";
             this.toolOpen.Click += new System.EventHandler(this.toolOpen_Click);
             // 
             // toolMinsize
             // 
             this.toolMinsize.Name = "toolMinsize";
-            this.toolMinsize.Size = new System.Drawing.Size(98, 24);
+            this.toolMinsize.Size = new System.Drawing.Size(85, 22);
             this.toolMinsize.Text = "最小化";
             this.toolMinsize.Click += new System.EventHandler(this.toolMinsize_Click);
             // 
             // toolSep1
             // 
             this.toolSep1.Name = "toolSep1";
-            this.toolSep1.Size = new System.Drawing.Size(95, 6);
+            this.toolSep1.Size = new System.Drawing.Size(82, 6);
             // 
             // toolExit
             // 
             this.toolExit.Name = "toolExit";
-            this.toolExit.Size = new System.Drawing.Size(98, 24);
+            this.toolExit.Size = new System.Drawing.Size(85, 22);
             this.toolExit.Text = "結束";
             this.toolExit.Click += new System.EventHandler(this.toolExit_Click);
             // 
@@ -111,7 +111,7 @@
             this.txtCgLogPath.Margin = new System.Windows.Forms.Padding(2);
             this.txtCgLogPath.Name = "txtCgLogPath";
             this.txtCgLogPath.ReadOnly = true;
-            this.txtCgLogPath.Size = new System.Drawing.Size(219, 25);
+            this.txtCgLogPath.Size = new System.Drawing.Size(219, 22);
             this.txtCgLogPath.TabIndex = 1;
             // 
             // btnSelectLogPath
@@ -145,12 +145,12 @@
             this.panel1.Size = new System.Drawing.Size(276, 232);
             this.panel1.TabIndex = 6;
             // 
-            // trackBar1
+            // cgLogListenerTrackBar
             // 
             this.cgLogListenerTrackBar.AutoSize = false;
             this.cgLogListenerTrackBar.LargeChange = 1;
             this.cgLogListenerTrackBar.Location = new System.Drawing.Point(2, 197);
-            this.cgLogListenerTrackBar.Name = "trackBar1";
+            this.cgLogListenerTrackBar.Name = "cgLogListenerTrackBar";
             this.cgLogListenerTrackBar.NameInSetting = "SoundVol";
             this.cgLogListenerTrackBar.Size = new System.Drawing.Size(108, 27);
             this.cgLogListenerTrackBar.TabIndex = 12;
@@ -162,7 +162,7 @@
             this.cgLogListenerSettingCheckBox1.Location = new System.Drawing.Point(2, 172);
             this.cgLogListenerSettingCheckBox1.Name = "cgLogListenerSettingCheckBox1";
             this.cgLogListenerSettingCheckBox1.NameInSetting = "PlaySound";
-            this.cgLogListenerSettingCheckBox1.Size = new System.Drawing.Size(89, 19);
+            this.cgLogListenerSettingCheckBox1.Size = new System.Drawing.Size(72, 16);
             this.cgLogListenerSettingCheckBox1.TabIndex = 8;
             this.cgLogListenerSettingCheckBox1.Text = "播放音效";
             this.cgLogListenerSettingCheckBox1.UseVisualStyleBackColor = true;
@@ -174,7 +174,7 @@
             this.cgLogListenerCheckBox6.Name = "cgLogListenerCheckBox6";
             this.cgLogListenerCheckBox6.NameInSetting = "ReMaze";
             this.cgLogListenerCheckBox6.RegexPattern = "你感覺到一股不可思議的力量，而『.*』好像快(要?)消失了。";
-            this.cgLogListenerCheckBox6.Size = new System.Drawing.Size(119, 19);
+            this.cgLogListenerCheckBox6.Size = new System.Drawing.Size(96, 16);
             this.cgLogListenerCheckBox6.TabIndex = 8;
             this.cgLogListenerCheckBox6.Text = "迷宮重組通知";
             this.cgLogListenerCheckBox6.ToolTipText = "迷宮重組";
@@ -187,7 +187,7 @@
             this.cgLogListenerCheckBox5.Name = "cgLogListenerCheckBox5";
             this.cgLogListenerCheckBox5.NameInSetting = "Sell";
             this.cgLogListenerCheckBox5.RegexPattern = "您順利賣掉了一個.*，(收入|獲得).*魔幣！";
-            this.cgLogListenerCheckBox5.Size = new System.Drawing.Size(119, 19);
+            this.cgLogListenerCheckBox5.Size = new System.Drawing.Size(96, 16);
             this.cgLogListenerCheckBox5.TabIndex = 8;
             this.cgLogListenerCheckBox5.Text = "擺攤售出通知";
             this.cgLogListenerCheckBox5.ToolTipText = "擺攤物品售出";
@@ -200,7 +200,7 @@
             this.cgLogListenerCheckBox4.Name = "cgLogListenerCheckBox4";
             this.cgLogListenerCheckBox4.NameInSetting = "PlayerJoin";
             this.cgLogListenerCheckBox4.RegexPattern = "加入了(你|您)的隊伍。";
-            this.cgLogListenerCheckBox4.Size = new System.Drawing.Size(134, 19);
+            this.cgLogListenerCheckBox4.Size = new System.Drawing.Size(108, 16);
             this.cgLogListenerCheckBox4.TabIndex = 8;
             this.cgLogListenerCheckBox4.Text = "被加入隊伍通知";
             this.cgLogListenerCheckBox4.ToolTipText = "當有人加入隊伍";
@@ -213,7 +213,7 @@
             this.cgLogListenerCheckBox3.Name = "cgLogListenerCheckBox3";
             this.cgLogListenerCheckBox3.NameInSetting = "MP0";
             this.cgLogListenerCheckBox3.RegexPattern = "魔力不足。";
-            this.cgLogListenerCheckBox3.Size = new System.Drawing.Size(119, 19);
+            this.cgLogListenerCheckBox3.Size = new System.Drawing.Size(96, 16);
             this.cgLogListenerCheckBox3.TabIndex = 8;
             this.cgLogListenerCheckBox3.Text = "魔力不足通知";
             this.cgLogListenerCheckBox3.ToolTipText = "採集到魔力不足";
@@ -224,19 +224,19 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(126, 2);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 15);
+            this.label1.Size = new System.Drawing.Size(65, 12);
             this.label1.TabIndex = 11;
             this.label1.Text = "自訂關鍵字";
             // 
             // cgLogListenerListBox
             // 
             this.cgLogListenerListBox.FormattingEnabled = true;
-            this.cgLogListenerListBox.ItemHeight = 15;
+            this.cgLogListenerListBox.ItemHeight = 12;
             this.cgLogListenerListBox.Location = new System.Drawing.Point(127, 20);
             this.cgLogListenerListBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.cgLogListenerListBox.Name = "cgLogListenerListBox";
             this.cgLogListenerListBox.NotifyIcon = this.notifyIcon;
-            this.cgLogListenerListBox.Size = new System.Drawing.Size(147, 154);
+            this.cgLogListenerListBox.Size = new System.Drawing.Size(147, 148);
             this.cgLogListenerListBox.TabIndex = 9;
             // 
             // btnDelCus
@@ -269,7 +269,7 @@
             this.cgLogListenerCheckBox2.Name = "cgLogListenerCheckBox2";
             this.cgLogListenerCheckBox2.NameInSetting = "ItemFull";
             this.cgLogListenerCheckBox2.RegexPattern = "物品欄沒有空位。";
-            this.cgLogListenerCheckBox2.Size = new System.Drawing.Size(104, 19);
+            this.cgLogListenerCheckBox2.Size = new System.Drawing.Size(84, 16);
             this.cgLogListenerCheckBox2.TabIndex = 1;
             this.cgLogListenerCheckBox2.Text = "道具滿通知";
             this.cgLogListenerCheckBox2.ToolTipText = "採集到道具欄滿格";
@@ -283,7 +283,7 @@
             this.cgLogListenerCheckBox1.Name = "cgLogListenerCheckBox1";
             this.cgLogListenerCheckBox1.NameInSetting = "Health";
             this.cgLogListenerCheckBox1.RegexPattern = "在工作時不小心受傷了。";
-            this.cgLogListenerCheckBox1.Size = new System.Drawing.Size(119, 19);
+            this.cgLogListenerCheckBox1.Size = new System.Drawing.Size(96, 16);
             this.cgLogListenerCheckBox1.TabIndex = 1;
             this.cgLogListenerCheckBox1.Text = "採集受傷通知";
             this.cgLogListenerCheckBox1.ToolTipText = "採集時受傷";
@@ -306,7 +306,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Location = new System.Drawing.Point(8, 278);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(82, 15);
+            this.linkLabel1.Size = new System.Drawing.Size(65, 12);
             this.linkLabel1.TabIndex = 7;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "關於本程式";
@@ -314,7 +314,7 @@
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(298, 302);
             this.Controls.Add(this.linkLabel1);
@@ -330,6 +330,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "魔力Log監視";
             this.MinimumSizeChanged += new System.EventHandler(this.FormMain_MinimumSizeChanged);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.Resize += new System.EventHandler(this.FormMain_Resize);
             this.notifyIconContextMenu.ResumeLayout(false);
