@@ -68,7 +68,7 @@ namespace CgLogListener
                     }
 
                     byte[] native = stack.ToArray();
-                    byte[] b = Encoding.Convert(Encoding.Default, Encoding.UTF8, native);
+                    byte[] b = Encoding.Convert(Encoding.GetEncoding("BIG5"), Encoding.UTF8, native);
                     string log = Encoding.UTF8.GetString(b).Replace("", " ");
                     /* 
                      * 多視窗時可能會連續偵測到相同的句子 (並且時間會一樣)
