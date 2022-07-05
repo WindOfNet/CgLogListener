@@ -22,6 +22,10 @@ namespace CgLogListener
             FormPrompt f = new FormPrompt();
             DialogResult result = f.ShowDialog(owner);
             value = f.txtValue.Text;
+            if (!string.IsNullOrWhiteSpace(f.txtExp.Text))
+            {
+                value += $"|{f.txtExp.Text}";
+            }
 
             return result;
         }

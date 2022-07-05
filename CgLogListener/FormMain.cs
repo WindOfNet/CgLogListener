@@ -197,7 +197,7 @@ namespace CgLogListener
             {
                 if (n.Notify(log))
                 {
-                    notifyIcon.ShowBalloonTip(10000, notifyIcon.BalloonTipTitle, log, ToolTipIcon.None);
+                    notifyIcon.ShowBalloonTip(1, notifyIcon.BalloonTipTitle, log, ToolTipIcon.None);
 
                     if (!settings.PlaySound)
                     {

@@ -73,9 +73,20 @@ namespace CgLogListener
             Settings settings = Settings.GetInstance();
             foreach (string s in settings.CustomizeTips)
             {
-                if (message.Contains(s))
+                var split = s.Split('|');
+
+                if (message.Contains(split[0]))
                 {
-                    return true;
+                    if (split.Length > 1)
+                    {
+                        var exps = split[1].Split(',');
+
+                        return !exps.Any(x => message.Contains(x));// !message.Contains(split[1]);
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
             }
 

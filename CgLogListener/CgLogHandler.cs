@@ -9,6 +9,7 @@ namespace CgLogListener
 {
     public class CgLogHandler
     {
+        object locker = new object();
         string logPath;
         string latestLog;
         public delegate void onNewLog(string message);
@@ -24,7 +25,7 @@ namespace CgLogListener
             logPath = Path.Combine(path, "Log");
             FileSystemWatcher fsw = new FileSystemWatcher(logPath);
             fsw.Filter = "*.txt";
-            fsw.NotifyFilter = NotifyFilters.LastWrite;
+            fsw.NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite;
             fsw.EnableRaisingEvents = true;
             fsw.Changed += Fsw_Changed;
         }
@@ -37,7 +38,7 @@ namespace CgLogListener
                 {
                     return false;
                 }
-                                
+
                 if (Directory.Exists(Path.Combine(path, "Log")))
                 {
                     return true;
@@ -52,33 +53,36 @@ namespace CgLogListener
         {
             try
             {
-                using (Stream stream = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                lock (locker)
                 {
-                    long l = stream.Length - 2;
-                    stream.Seek(l, SeekOrigin.Begin);
-                    Stack<byte> stack = new Stack<byte>();
-                    while (true)
+                    using (Stream stream = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
-                        stream.Seek(--l, SeekOrigin.Begin);
-                        int tmp = stream.ReadByte();
-                        if (tmp == '\n')
-                            break;
-                        else
-                            stack.Push((byte)tmp);
-                    }
+                        long l = stream.Length - 2;
+                        stream.Seek(l, SeekOrigin.Begin);
+                        Stack<byte> stack = new Stack<byte>();
+                        while (true)
+                        {
+                            stream.Seek(--l, SeekOrigin.Begin);
+                            int tmp = stream.ReadByte();
+                            if (tmp == '\n')
+                                break;
+                            else
+                                stack.Push((byte)tmp);
+                        }
 
-                    byte[] native = stack.ToArray();
-                    byte[] b = Encoding.Convert(Encoding.GetEncoding("BIG5"), Encoding.UTF8, native);
-                    string log = Encoding.UTF8.GetString(b).Replace("", " ");
-                    /* 
-                     * 多視窗時可能會連續偵測到相同的句子 (並且時間會一樣)
-                     * 所以會有一個變數去紀錄最後的 log, 並拿來比對當次的 log
-                     * 若 not equals 才會觸發事件
-                     */
-                    if (!log.Equals(latestLog))
-                    {
-                        latestLog = log;
-                        OnNewLog?.Invoke(log);
+                        byte[] native = stack.ToArray();
+                        byte[] b = Encoding.Convert(Encoding.GetEncoding("BIG5"), Encoding.UTF8, native);
+                        string log = Encoding.UTF8.GetString(b).Replace("", " ");
+                        /* 
+                         * 多視窗時可能會連續偵測到相同的句子 (並且時間會一樣)
+                         * 所以會有一個變數去紀錄最後的 log, 並拿來比對當次的 log
+                         * 若 not equals 才會觸發事件
+                         */
+                        if (!log.Equals(latestLog))
+                        {
+                            latestLog = log;
+                            OnNewLog?.Invoke(log);
+                        }
                     }
                 }
             }

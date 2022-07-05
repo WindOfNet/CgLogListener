@@ -32,14 +32,16 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtValue = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtExp = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(238, 5);
+            this.btnOk.Location = new System.Drawing.Point(299, 2);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(57, 26);
-            this.btnOk.TabIndex = 1;
+            this.btnOk.TabIndex = 3;
             this.btnOk.Text = "設定";
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
@@ -49,7 +51,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(11, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 18);
+            this.label1.Size = new System.Drawing.Size(40, 15);
             this.label1.TabIndex = 1;
             this.label1.Text = "關鍵字";
             // 
@@ -57,28 +59,46 @@
             // 
             this.txtValue.Location = new System.Drawing.Point(67, 7);
             this.txtValue.Name = "txtValue";
-            this.txtValue.Size = new System.Drawing.Size(165, 25);
-            this.txtValue.TabIndex = 0;
+            this.txtValue.Size = new System.Drawing.Size(210, 21);
+            this.txtValue.TabIndex = 1;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(301, 5);
+            this.btnCancel.Location = new System.Drawing.Point(299, 31);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(57, 26);
-            this.btnCancel.TabIndex = 2;
+            this.btnCancel.TabIndex = 4;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(11, 37);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(95, 15);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "排除 (以逗號分隔)";
+            // 
+            // txtExp
+            // 
+            this.txtExp.Location = new System.Drawing.Point(112, 34);
+            this.txtExp.Name = "txtExp";
+            this.txtExp.Size = new System.Drawing.Size(165, 21);
+            this.txtExp.TabIndex = 2;
+            // 
             // FormPrompt
             // 
             this.AcceptButton = this.btnOk;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(368, 39);
+            this.ClientSize = new System.Drawing.Size(368, 64);
             this.ControlBox = false;
+            this.Controls.Add(this.txtExp);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.txtValue);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnCancel);
@@ -103,5 +123,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtValue;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtExp;
     }
 }
