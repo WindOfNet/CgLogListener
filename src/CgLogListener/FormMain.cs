@@ -1,93 +1,54 @@
-﻿using NAudio.Wave;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace CgLogListener
 {
     public partial class FormMain : Form
     {
-        Settings settings;
-        CgLogHandler watcher;
-        WaveChannel32 volumeStream;
-        WaveOutEvent waveOut;
+        private Settings settings;
+        private CgLogHandler watcher;
+        private readonly MediaPlayer mp = new MediaPlayer();
 
         public FormMain()
         {
             InitializeComponent();
 
             // fix IME bug
-            this.ImeMode = ImeMode.OnHalf;
-            this.Icon = Resource.icon;
-            this.notifyIcon.Icon = Resource.icon;
-
-            settings = Settings.GetInstance();
-
-            const string wavName = "sound.wav";
-            string wavPath = Path.Combine(Directory.GetCurrentDirectory(), wavName);
-            Stream wavStream = null;
-
-            if (!File.Exists(wavPath))
-            {
-                // set default wav
-                wavStream = Resource.sound;
-            }
-            else
-            {
-                wavStream = File.Open(wavPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            }
-
-            WaveFileReader wave = new WaveFileReader(wavStream);
-            volumeStream = new WaveChannel32(wave) { PadWithZeroes = false };
-
-            waveOut = new WaveOutEvent();
-            waveOut.Init(volumeStream);
+            ImeMode = ImeMode.OnHalf;
+            Icon = Resource.icon;
+            notifyIcon.Icon = Resource.icon;
         }
 
-        private void frmMain_Load(object sender, System.EventArgs e)
+        private void FrmMain_Load(object sender, EventArgs e)
         {
-            if (!settings.Load())
-            {
-                // load conf err         
-                MessageBox.Show(this, "讀取設定失敗", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Close();
-                return;
-            }
+            settings = Settings.GetInstance();
 
             if (string.IsNullOrEmpty(settings.CgLogPath))
             {
                 string cgLogPath = settings.CgLogPath;
 
-                if (!selectLogPath(out cgLogPath))
+                if (!SelectLogPath(out cgLogPath))
                 {
                     this.Close();
                     return;
                 }
 
-                settings.CgLogPath = cgLogPath;
-                settings.ReWrite();
+                settings.SetCgLogPath(cgLogPath);
             }
 
-            if (!Directory.Exists(settings.CgLogPath) ||
-                !CgLogHandler.ValidationPath(settings.CgLogPath))
+            if (!Directory.Exists(settings.CgLogPath) || !CgLogHandler.ValidationPath(settings.CgLogPath))
             {
                 // the dir path invalid, set to default and exit
-                settings.CgLogPath = string.Empty;
-                settings.ReWrite();
+                settings.SetCgLogPath(string.Empty);
                 MessageBox.Show(this, "設定檔路徑錯誤, 請重新啟動", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.Close();
                 return;
             }
 
-            bindWatcher();
+            BindWatcher();
 
             // set playsound check
             cgLogListenerSettingCheckBox1.Checked = settings.PlaySound;
@@ -96,10 +57,13 @@ namespace CgLogListener
             cgLogListenerTrackBar.Value = settings.SoundVol;
 
             // set default tips check
-            foreach (CgLogListenerCheckBox chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
+            foreach (var chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
             {
-                settings.DefaultTips.TryGetValue(chk.NameInSetting, out bool enable);
-                chk.Checked = enable;
+                // skip playsound
+                if (chk == cgLogListenerSettingCheckBox1) { continue; }
+
+                settings.StandardTips.TryGetValue(chk.NameInSetting, out bool isEnable);
+                chk.Checked = isEnable;
             }
 
             // set custom tips items
@@ -124,38 +88,35 @@ namespace CgLogListener
 
         private void CgLogListenerCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            CgLogListenerSettingCheckBox chk = (CgLogListenerSettingCheckBox)sender;
-            settings.DefaultTips[chk.NameInSetting] = chk.Checked;
-            settings.ReWrite();
+            var chk = (CgLogListenerCheckBox)sender;
+            settings.SetStandardTip(chk.NameInSetting, chk.Checked);
         }
 
         private void CgLogListenerSettingCheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            settings.PlaySound = cgLogListenerSettingCheckBox1.Checked;
-            settings.ReWrite();
+            var chk = (CgLogListenerCheckBox)sender;
+            settings.SetPlaySound(chk.Checked);
         }
 
         private void CgLogListenerTrackBar_ValueChanged(object sender, EventArgs e)
         {
-            settings.SoundVol = cgLogListenerTrackBar.Value;
-            settings.ReWrite();
+            var bar = (CgLogListenerTrackBar)sender;
+            settings.SetSoundVol(bar.Value);
         }
 
-        private void btnSelectLogPath_Click(object sender, System.EventArgs e)
+        private void BtnSelectLogPath_Click(object sender, EventArgs e)
         {
-            if (selectLogPath(out string cgLogPath))
+            if (SelectLogPath(out _))
             {
-                settings.CgLogPath = cgLogPath;
-                settings.ReWrite();
-                bindWatcher();
+                watcher.Dispose();
+                BindWatcher();
             }
         }
 
-        bool selectLogPath(out string path)
+        bool SelectLogPath(out string path)
         {
             path = null;
-            DialogResult result = DialogResult.No;
-            FolderBrowserDialog dialog = new FolderBrowserDialog()
+            var dialog = new FolderBrowserDialog()
             {
                 ShowNewFolderButton = false,
                 Description = @"請選擇魔力寶貝的目錄 (e.g. D:\CrossGate\)"
@@ -163,7 +124,7 @@ namespace CgLogListener
 
             while (true)
             {
-                result = dialog.ShowDialog(this);
+                var result = dialog.ShowDialog(this);
 
                 if (result == DialogResult.Cancel)
                 {
@@ -184,44 +145,40 @@ namespace CgLogListener
             }
         }
 
-        void bindWatcher()
+        void BindWatcher()
         {
             txtCgLogPath.Text = settings.CgLogPath;
             watcher = new CgLogHandler(settings.CgLogPath);
-            watcher.OnNewLog += watcher_OnNewLog;
+            watcher.OnNewLog += Watcher_OnNewLog;
         }
 
-        void watcher_OnNewLog(string log)
+        void Watcher_OnNewLog(string log)
         {
-            foreach (INotifyMessage n in panel1.Controls.OfType<INotifyMessage>())
+            foreach (var n in panel1.Controls.OfType<INotifyMessage>())
             {
                 if (n.Notify(log))
                 {
                     notifyIcon.ShowBalloonTip(1, notifyIcon.BalloonTipTitle, log, ToolTipIcon.None);
 
-                    if (!settings.PlaySound)
+                    const string soundName = "sound.wav";
+                    if (settings.PlaySound && File.Exists(soundName))
                     {
-                        return;
+                        Invoke((Action)delegate
+                        {
+                            mp.Stop();
+                            mp.Open(new Uri(new FileInfo(soundName).FullName));
+                            mp.Volume = settings.SoundVol / 10d;
+                            mp.Play();
+                        });
                     }
 
-                    GC.Collect();
-
-                    if (waveOut.PlaybackState == PlaybackState.Playing)
-                    {
-                        waveOut.Stop();
-                    }
-
-                    volumeStream.Position = 0;
-                    waveOut.Volume = (float)this.Invoke((Func<float>)delegate { return cgLogListenerTrackBar.Value / 10f; });
-                    waveOut.Play();
-
-                    // break if one of trigger
+                    // break if was trigger
                     break;
                 }
             }
         }
 
-        private void btnAddCus_Click(object sender, System.EventArgs e)
+        private void BtnAddCus_Click(object sender, EventArgs e)
         {
             if (FormPrompt.ShowDialog(this, out string value) != DialogResult.OK ||
                 string.IsNullOrEmpty(value))
@@ -229,23 +186,25 @@ namespace CgLogListener
                 return;
             }
 
-            cgLogListenerListBox.AddListen(value);
+            settings.AddCustmizeTip(value);
+            cgLogListenerListBox.Items.Add(value);
         }
 
-        private void btnDelCus_Click(object sender, EventArgs e)
+        private void BtnDelCus_Click(object sender, EventArgs e)
         {
             if (cgLogListenerListBox.SelectedIndex < 0)
             {
                 return;
             }
 
-            string selectItem = (string)cgLogListenerListBox.SelectedItem;
-            cgLogListenerListBox.RemoveListen(selectItem);
+            var selectItem = (string)cgLogListenerListBox.SelectedItem;
+            settings.RemoveCustmizeTip(selectItem);
+            cgLogListenerListBox.Items.Remove(selectItem);
         }
 
         #region notifyIcon, window minsize and exit ...
 
-        private void notifyIcon_DoubleClick(object sender, System.EventArgs e)
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
         {
             if (this.WindowState == FormWindowState.Minimized)
             {
@@ -258,23 +217,23 @@ namespace CgLogListener
             }
         }
 
-        private void btnExit_Click(object sender, System.EventArgs e)
+        private void BtnExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        private void toolOpen_Click(object sender, System.EventArgs e)
+        private void ToolOpen_Click(object sender, EventArgs e)
         {
             this.Visible = true;
             this.WindowState = FormWindowState.Normal;
         }
 
-        private void toolMinsize_Click(object sender, System.EventArgs e)
+        private void ToolMinsize_Click(object sender, EventArgs e)
         {
             this.WindowState = FormWindowState.Minimized;
         }
 
-        private void toolExit_Click(object sender, System.EventArgs e)
+        private void ToolExit_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -294,13 +253,13 @@ namespace CgLogListener
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            watcher.Dispose();
             notifyIcon.Dispose();
-            waveOut?.Dispose();
         }
 
         #endregion
 
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/WindOfNet/CgLogListener");
         }

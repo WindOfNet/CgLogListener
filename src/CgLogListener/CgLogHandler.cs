@@ -7,11 +7,12 @@ using System.Text;
 
 namespace CgLogListener
 {
-    public class CgLogHandler
+    public class CgLogHandler : IDisposable
     {
-        object locker = new object();
-        string logPath;
-        string latestLog;
+        readonly object locker = new object();
+        readonly string logPath;
+        private readonly FileSystemWatcher fsw;
+        private string latestLog;
         public delegate void onNewLog(string message);
         public event onNewLog OnNewLog;
 
@@ -20,13 +21,17 @@ namespace CgLogListener
             if (string.IsNullOrEmpty(path) ||
                 !Directory.Exists(path) ||
                 !ValidationPath(path))
-                throw new ArgumentException();
+            {
+                throw new ArgumentException(nameof(path));
+            }
 
             logPath = Path.Combine(path, "Log");
-            FileSystemWatcher fsw = new FileSystemWatcher(logPath);
-            fsw.Filter = "*.txt";
-            fsw.NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite;
-            fsw.EnableRaisingEvents = true;
+            fsw = new FileSystemWatcher(logPath)
+            {
+                Filter = "*.txt",
+                NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite,
+                EnableRaisingEvents = true
+            };
             fsw.Changed += Fsw_Changed;
         }
 
@@ -55,24 +60,28 @@ namespace CgLogListener
             {
                 lock (locker)
                 {
-                    using (Stream stream = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    using (var stream = new FileStream(e.FullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
-                        long l = stream.Length - 2;
+                        var l = stream.Length - 2;
                         stream.Seek(l, SeekOrigin.Begin);
-                        Stack<byte> stack = new Stack<byte>();
+                        var stack = new Stack<byte>();
                         while (true)
                         {
                             stream.Seek(--l, SeekOrigin.Begin);
-                            int tmp = stream.ReadByte();
+                            var tmp = stream.ReadByte();
                             if (tmp == '\n')
+                            {
                                 break;
+                            }
                             else
+                            {
                                 stack.Push((byte)tmp);
+                            }
                         }
 
-                        byte[] native = stack.ToArray();
-                        byte[] b = Encoding.Convert(Encoding.GetEncoding("BIG5"), Encoding.UTF8, native);
-                        string log = Encoding.UTF8.GetString(b).Replace("", " ");
+                        var native = stack.ToArray();
+                        var b = Encoding.Convert(Encoding.GetEncoding("BIG5"), Encoding.UTF8, native);
+                        var log = Encoding.UTF8.GetString(b).Replace("", " ");
                         /* 
                          * 多視窗時可能會連續偵測到相同的句子 (並且時間會一樣)
                          * 所以會有一個變數去紀錄最後的 log, 並拿來比對當次的 log
@@ -87,6 +96,11 @@ namespace CgLogListener
                 }
             }
             catch { }
+        }
+
+        public void Dispose()
+        {
+            fsw.Dispose();
         }
     }
 }
