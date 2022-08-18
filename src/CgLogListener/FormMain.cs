@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -56,6 +57,9 @@ namespace CgLogListener
             // set playsound vol
             cgLogListenerTrackBar.Value = settings.SoundVol;
 
+            // set line notify
+            checkBox1.Checked = settings.LineNotify;
+
             // set default tips check
             foreach (var chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
             {
@@ -84,6 +88,7 @@ namespace CgLogListener
             cgLogListenerCheckBox6.CheckedChanged += CgLogListenerCheckBox_CheckedChanged;
             cgLogListenerSettingCheckBox1.CheckedChanged += CgLogListenerSettingCheckBox1_CheckedChanged;
             cgLogListenerTrackBar.ValueChanged += CgLogListenerTrackBar_ValueChanged;
+            checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
         }
 
         private void CgLogListenerCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -152,7 +157,7 @@ namespace CgLogListener
             watcher.OnNewLog += Watcher_OnNewLog;
         }
 
-        void Watcher_OnNewLog(string log)
+        async void Watcher_OnNewLog(string log)
         {
             foreach (var n in panel1.Controls.OfType<INotifyMessage>())
             {
@@ -170,6 +175,15 @@ namespace CgLogListener
                             mp.Volume = settings.SoundVol / 10d;
                             mp.Play();
                         });
+                    }
+
+                    if (settings.LineNotify)
+                    {
+                        var lineToken = settings.LineTokey;
+                        if (!string.IsNullOrEmpty(lineToken))
+                        {
+                            await LineNotifyHelper.Notify(lineToken, log);
+                        }
                     }
 
                     // break if was trigger
@@ -200,6 +214,21 @@ namespace CgLogListener
             var selectItem = (string)cgLogListenerListBox.SelectedItem;
             settings.RemoveCustmizeTip(selectItem);
             cgLogListenerListBox.Items.Remove(selectItem);
+        }
+
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                FormLineTokenPrompt.ShowDialog(this, out string value);
+                settings.SetLineNotify(true);
+                settings.SetLineTokey(value);
+            }
+            else
+            {
+                settings.SetLineNotify(false);
+                settings.SetLineTokey(string.Empty);
+            }
         }
 
         #region notifyIcon, window minsize and exit ...
@@ -253,8 +282,8 @@ namespace CgLogListener
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            watcher.Dispose();
-            notifyIcon.Dispose();
+            watcher?.Dispose();
+            notifyIcon?.Dispose();
         }
 
         #endregion

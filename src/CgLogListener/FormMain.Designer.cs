@@ -39,6 +39,7 @@
             this.txtCgLogPath = new System.Windows.Forms.TextBox();
             this.btnSelectLogPath = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.cgLogListenerTrackBar = new CgLogListener.CgLogListenerTrackBar();
             this.cgLogListenerSettingCheckBox1 = new CgLogListener.CgLogListenerCheckBox();
             this.cgLogListenerCheckBox6 = new CgLogListener.CgLogListenerCheckBox();
@@ -127,6 +128,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.cgLogListenerTrackBar);
             this.panel1.Controls.Add(this.cgLogListenerSettingCheckBox1);
             this.panel1.Controls.Add(this.cgLogListenerCheckBox6);
@@ -142,8 +144,18 @@
             this.panel1.Location = new System.Drawing.Point(11, 38);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(276, 232);
+            this.panel1.Size = new System.Drawing.Size(276, 255);
             this.panel1.TabIndex = 6;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(2, 230);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(77, 16);
+            this.checkBox1.TabIndex = 13;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // cgLogListenerTrackBar
             // 
@@ -162,6 +174,7 @@
             this.cgLogListenerSettingCheckBox1.Location = new System.Drawing.Point(2, 172);
             this.cgLogListenerSettingCheckBox1.Name = "cgLogListenerSettingCheckBox1";
             this.cgLogListenerSettingCheckBox1.NameInSetting = "PlaySound";
+            this.cgLogListenerSettingCheckBox1.RegexPattern = null;
             this.cgLogListenerSettingCheckBox1.Size = new System.Drawing.Size(72, 16);
             this.cgLogListenerSettingCheckBox1.TabIndex = 8;
             this.cgLogListenerSettingCheckBox1.Text = "播放音效";
@@ -286,7 +299,7 @@
             // btnExit
             // 
             this.btnExit.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.btnExit.Location = new System.Drawing.Point(198, 274);
+            this.btnExit.Location = new System.Drawing.Point(198, 300);
             this.btnExit.Margin = new System.Windows.Forms.Padding(2);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(89, 22);
@@ -298,7 +311,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(8, 278);
+            this.linkLabel1.Location = new System.Drawing.Point(9, 311);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(65, 12);
             this.linkLabel1.TabIndex = 7;
@@ -310,7 +323,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(298, 302);
+            this.ClientSize = new System.Drawing.Size(298, 333);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnSelectLogPath);
@@ -361,6 +374,7 @@
         private CgLogListenerCheckBox cgLogListenerSettingCheckBox1;
         private CgLogListenerCheckBox cgLogListenerCheckBox6;
         private CgLogListenerTrackBar cgLogListenerTrackBar;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

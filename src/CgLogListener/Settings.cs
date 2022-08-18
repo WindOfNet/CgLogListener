@@ -16,6 +16,8 @@ namespace CgLogListener
         const string settingsStandardTipsSection = "standard tips";
         const string custmizeFileName = "custmize.dat";
 
+        public bool LineNotify { get; private set; }
+        public string LineTokey { get; private set; }
         public bool PlaySound { get; private set; }
         public int SoundVol { get; private set; }
         public string CgLogPath { get; private set; }
@@ -54,6 +56,8 @@ namespace CgLogListener
             CgLogPath = baseData[nameof(CgLogPath)];
             PlaySound = baseData[nameof(PlaySound)] == "1";
             SoundVol = int.Parse(baseData[nameof(SoundVol)]);
+            LineNotify = baseData[nameof(LineNotify)] == "1";
+            LineTokey = baseData[nameof(LineTokey)];
 
             var standardTipData = iniData[settingsStandardTipsSection];
             foreach (var kd in standardTipData)
@@ -77,6 +81,7 @@ namespace CgLogListener
             baseSection[nameof(CgLogPath)] = string.Empty;
             baseSection[nameof(PlaySound)] = "1";
             baseSection[nameof(SoundVol)] = "5";
+            baseSection[nameof(LineNotify)] = "0";
 
             var fileIniDataParser = new FileIniDataParser();
             fileIniDataParser.WriteFile(settingsFileName, iniData);
@@ -91,6 +96,8 @@ namespace CgLogListener
             baseSection[nameof(CgLogPath)] = CgLogPath;
             baseSection[nameof(PlaySound)] = PlaySound ? "1" : "0";
             baseSection[nameof(SoundVol)] = SoundVol.ToString();
+            baseSection[nameof(LineNotify)] = LineNotify ? "1" : "0";
+            baseSection[nameof(LineTokey)] = LineTokey;
 
             var standardTipData = iniData[settingsStandardTipsSection];
             foreach (var kv in StandardTips)
@@ -136,6 +143,18 @@ namespace CgLogListener
         internal void RemoveCustmizeTip(string value)
         {
             CustomizeTips.Remove(value);
+            UpdateConfig();
+        }
+
+        internal void SetLineTokey(string value)
+        {
+            LineTokey = value;
+            UpdateConfig();
+        }
+
+        internal void SetLineNotify(bool value)
+        {
+            LineNotify = value;
             UpdateConfig();
         }
     }
