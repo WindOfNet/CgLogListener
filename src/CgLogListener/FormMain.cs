@@ -194,7 +194,8 @@ namespace CgLogListener
 
         private void BtnAddCus_Click(object sender, EventArgs e)
         {
-            if (FormPrompt.ShowDialog(this, out string value) != DialogResult.OK ||
+            FormPrompt f = new FormPrompt();
+            if (f.ShowDialog(f,this, out string value) != DialogResult.OK ||
                 string.IsNullOrEmpty(value))
             {
                 return;
@@ -291,6 +292,26 @@ namespace CgLogListener
         private void LinkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start("https://github.com/WindOfNet/CgLogListener");
+        }
+
+        private void EdditButton_Click(object sender, EventArgs e)
+        {
+            if (cgLogListenerListBox.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            int selectIndex = cgLogListenerListBox.SelectedIndex;
+            settings.GetValue(selectIndex, out string TipValue, out string ExpValue);
+            FormPrompt formPrompt = new FormPrompt(TipValue, ExpValue);
+            if (formPrompt.ShowDialog(formPrompt, this, out string value) != DialogResult.OK ||
+               string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            settings.EditCustmizeTip(value, selectIndex);
+            cgLogListenerListBox.Items[selectIndex] = value;
         }
     }
 }

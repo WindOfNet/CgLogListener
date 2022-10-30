@@ -47,6 +47,21 @@ namespace CgLogListener
             LoadSettings();
         }
 
+        public void GetValue(int index, out string value, out string ExpValue)
+        {
+            if (File.Exists(custmizeFileName))
+            {
+                string SettingValue = File.ReadAllLines(custmizeFileName)[index];
+                value = SettingValue.Split(new char[] { '|' }, 2)[0];
+                ExpValue = SettingValue.Split(new char[] { '|' }, 2)[1];
+            }
+            else
+            {
+                value = "";
+                ExpValue = "";
+            }
+        }
+
         private void LoadSettings()
         {
             var fileIniDataParser = new FileIniDataParser();
@@ -137,6 +152,12 @@ namespace CgLogListener
         internal void AddCustmizeTip(string value)
         {
             CustomizeTips.Add(value);
+            UpdateConfig();
+        }
+
+        internal void EditCustmizeTip(string value, int index)
+        {
+            CustomizeTips[index] = value;
             UpdateConfig();
         }
 

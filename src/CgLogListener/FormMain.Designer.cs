@@ -54,6 +54,7 @@
             this.cgLogListenerCheckBox1 = new CgLogListener.CgLogListenerCheckBox();
             this.btnExit = new System.Windows.Forms.Button();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.EdditButton = new System.Windows.Forms.Button();
             this.notifyIconContextMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cgLogListenerTrackBar)).BeginInit();
@@ -78,31 +79,31 @@
             this.toolExit});
             this.notifyIconContextMenu.Name = "notifyIconContextMenu";
             this.notifyIconContextMenu.ShowImageMargin = false;
-            this.notifyIconContextMenu.Size = new System.Drawing.Size(86, 76);
+            this.notifyIconContextMenu.Size = new System.Drawing.Size(89, 76);
             // 
             // toolOpen
             // 
             this.toolOpen.Name = "toolOpen";
-            this.toolOpen.Size = new System.Drawing.Size(85, 22);
+            this.toolOpen.Size = new System.Drawing.Size(88, 22);
             this.toolOpen.Text = "開啟";
             this.toolOpen.Click += new System.EventHandler(this.ToolOpen_Click);
             // 
             // toolMinsize
             // 
             this.toolMinsize.Name = "toolMinsize";
-            this.toolMinsize.Size = new System.Drawing.Size(85, 22);
+            this.toolMinsize.Size = new System.Drawing.Size(88, 22);
             this.toolMinsize.Text = "最小化";
             this.toolMinsize.Click += new System.EventHandler(this.ToolMinsize_Click);
             // 
             // toolSep1
             // 
             this.toolSep1.Name = "toolSep1";
-            this.toolSep1.Size = new System.Drawing.Size(82, 6);
+            this.toolSep1.Size = new System.Drawing.Size(85, 6);
             // 
             // toolExit
             // 
             this.toolExit.Name = "toolExit";
-            this.toolExit.Size = new System.Drawing.Size(85, 22);
+            this.toolExit.Size = new System.Drawing.Size(88, 22);
             this.toolExit.Text = "結束";
             this.toolExit.Click += new System.EventHandler(this.ToolExit_Click);
             // 
@@ -128,6 +129,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.EdditButton);
             this.panel1.Controls.Add(this.checkBox1);
             this.panel1.Controls.Add(this.cgLogListenerTrackBar);
             this.panel1.Controls.Add(this.cgLogListenerSettingCheckBox1);
@@ -250,7 +252,7 @@
             // 
             // btnDelCus
             // 
-            this.btnDelCus.Location = new System.Drawing.Point(178, 181);
+            this.btnDelCus.Location = new System.Drawing.Point(223, 181);
             this.btnDelCus.Margin = new System.Windows.Forms.Padding(2);
             this.btnDelCus.Name = "btnDelCus";
             this.btnDelCus.Size = new System.Drawing.Size(47, 22);
@@ -319,6 +321,17 @@
             this.linkLabel1.Text = "關於本程式";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1_LinkClicked);
             // 
+            // EdditButton
+            // 
+            this.EdditButton.Location = new System.Drawing.Point(175, 181);
+            this.EdditButton.Margin = new System.Windows.Forms.Padding(2);
+            this.EdditButton.Name = "EdditButton";
+            this.EdditButton.Size = new System.Drawing.Size(47, 22);
+            this.EdditButton.TabIndex = 14;
+            this.EdditButton.Text = "編輯";
+            this.EdditButton.UseVisualStyleBackColor = true;
+            this.EdditButton.Click += new System.EventHandler(this.EdditButton_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -329,7 +342,7 @@
             this.Controls.Add(this.btnSelectLogPath);
             this.Controls.Add(this.txtCgLogPath);
             this.Controls.Add(this.btnExit);
-            this.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.MaximizeBox = false;
@@ -375,6 +388,7 @@
         private CgLogListenerCheckBox cgLogListenerCheckBox6;
         private CgLogListenerTrackBar cgLogListenerTrackBar;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button EdditButton;
     }
 }
 

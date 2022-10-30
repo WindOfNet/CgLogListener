@@ -11,15 +11,22 @@ namespace CgLogListener
 {
     public partial class FormPrompt : Form
     {
-        FormPrompt()
+        public FormPrompt()
         {
             InitializeComponent();
             this.ImeMode = ImeMode.OnHalf;
         }
 
-        public static DialogResult ShowDialog(IWin32Window owner, out string value)
+        public FormPrompt(string value, string expValue)
         {
-            FormPrompt f = new FormPrompt();
+            InitializeComponent();
+            txtValue.Text = value;
+            txtExp.Text = expValue;
+            this.ImeMode = ImeMode.OnHalf;
+        }
+
+        public DialogResult ShowDialog(FormPrompt f, IWin32Window owner, out string value)
+        {
             DialogResult result = f.ShowDialog(owner);
             value = f.txtValue.Text;
             if (!string.IsNullOrWhiteSpace(f.txtExp.Text))
