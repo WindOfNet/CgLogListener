@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace CgLogListener
+namespace LineNotifier
 {
     public static class LineNotifyHelper
     {

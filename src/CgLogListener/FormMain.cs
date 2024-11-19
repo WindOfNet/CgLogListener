@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Web;
 using System.Windows.Forms;
 using System.Windows.Media;
 
@@ -58,7 +59,7 @@ namespace CgLogListener
             cgLogListenerTrackBar.Value = settings.SoundVol;
 
             // set line notify
-            checkBox1.Checked = settings.LineNotify;
+            checkBox1.Checked = settings.CustomNotify;
 
             // set default tips check
             foreach (var chk in panel1.Controls.OfType<CgLogListenerCheckBox>())
@@ -157,7 +158,7 @@ namespace CgLogListener
             watcher.OnNewLog += Watcher_OnNewLog;
         }
 
-        async void Watcher_OnNewLog(string log)
+        void Watcher_OnNewLog(string log)
         {
             foreach (var n in panel1.Controls.OfType<INotifyMessage>())
             {
@@ -177,12 +178,20 @@ namespace CgLogListener
                         });
                     }
 
-                    if (settings.LineNotify)
+                    if (settings.CustomNotify)
                     {
-                        var lineToken = settings.LineTokey;
-                        if (!string.IsNullOrEmpty(lineToken))
+                        foreach (var notifier in settings.CustomNotifier.Split(','))
                         {
-                            await LineNotifyHelper.Notify(lineToken, log);
+                            try
+                            {
+                                ProcessStartInfo p = new ProcessStartInfo(notifier, $"\"{log}\"")
+                                {
+                                    WindowStyle = ProcessWindowStyle.Hidden,
+                                    CreateNoWindow = true
+                                };
+                                Process.Start(p);
+                            }
+                            catch { }
                         }
                     }
 
@@ -220,14 +229,14 @@ namespace CgLogListener
         {
             if (checkBox1.Checked)
             {
-                FormLineTokenPrompt.ShowDialog(this, out string value);
-                settings.SetLineNotify(true);
-                settings.SetLineTokey(value);
+                FormCustomNotifierPrompt.ShowDialog(this, out string value);
+                settings.SetCustomNotify(true);
+                settings.SetCustomNotifier(value);
             }
             else
             {
-                settings.SetLineNotify(false);
-                settings.SetLineTokey(string.Empty);
+                settings.SetCustomNotify(false);
+                settings.SetCustomNotifier(string.Empty);
             }
         }
 

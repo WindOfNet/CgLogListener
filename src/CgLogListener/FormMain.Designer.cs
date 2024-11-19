@@ -152,9 +152,9 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(2, 230);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(83, 16);
+            this.checkBox1.Size = new System.Drawing.Size(93, 16);
             this.checkBox1.TabIndex = 13;
-            this.checkBox1.Text = "LINE Notify";
+            this.checkBox1.Text = "Custom Notify";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // cgLogListenerTrackBar

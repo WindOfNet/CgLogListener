@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace CgLogListener
 {
-    public partial class FormLineTokenPrompt : Form
+    public partial class FormCustomNotifierPrompt : Form
     {
-        FormLineTokenPrompt()
+        FormCustomNotifierPrompt()
         {
             InitializeComponent();
             this.ImeMode = ImeMode.OnHalf;
@@ -19,7 +19,7 @@ namespace CgLogListener
 
         public static DialogResult ShowDialog(IWin32Window owner, out string value)
         {
-            FormLineTokenPrompt f = new FormLineTokenPrompt();
+            FormCustomNotifierPrompt f = new FormCustomNotifierPrompt();
             DialogResult result = f.ShowDialog(owner);
             value = f.txtValue.Text;
 

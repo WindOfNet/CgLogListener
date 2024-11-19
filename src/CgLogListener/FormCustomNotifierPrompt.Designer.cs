@@ -1,6 +1,6 @@
 ﻿namespace CgLogListener
 {
-    partial class FormLineTokenPrompt
+    partial class FormCustomNotifierPrompt
     {
         /// <summary>
         /// Required designer variable.
@@ -48,9 +48,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(11, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 15);
+            this.label1.Size = new System.Drawing.Size(47, 15);
             this.label1.TabIndex = 1;
-            this.label1.Text = "LINE Token";
+            this.label1.Text = "Notifier";
             // 
             // txtValue
             // 
@@ -59,7 +59,7 @@
             this.txtValue.Size = new System.Drawing.Size(210, 21);
             this.txtValue.TabIndex = 1;
             // 
-            // FormLineTokenPrompt
+            // FormCustomNotifierPrompt
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 15F);
@@ -73,7 +73,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormLineTokenPrompt";
+            this.Name = "FormCustomNotifierPrompt";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

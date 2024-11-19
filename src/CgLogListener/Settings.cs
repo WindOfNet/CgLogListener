@@ -16,8 +16,8 @@ namespace CgLogListener
         const string settingsStandardTipsSection = "standard tips";
         const string custmizeFileName = "custmize.dat";
 
-        public bool LineNotify { get; private set; }
-        public string LineTokey { get; private set; }
+        public bool CustomNotify { get; private set; }
+        public string CustomNotifier { get; private set; }
         public bool PlaySound { get; private set; }
         public int SoundVol { get; private set; }
         public string CgLogPath { get; private set; }
@@ -56,8 +56,8 @@ namespace CgLogListener
             CgLogPath = baseData[nameof(CgLogPath)];
             PlaySound = baseData[nameof(PlaySound)] == "1";
             SoundVol = int.Parse(baseData[nameof(SoundVol)]);
-            LineNotify = baseData[nameof(LineNotify)] == "1";
-            LineTokey = baseData[nameof(LineTokey)];
+            CustomNotify = baseData[nameof(CustomNotify)] == "1";
+            CustomNotifier = baseData[nameof(CustomNotifier)];
 
             var standardTipData = iniData[settingsStandardTipsSection];
             foreach (var kd in standardTipData)
@@ -81,7 +81,7 @@ namespace CgLogListener
             baseSection[nameof(CgLogPath)] = string.Empty;
             baseSection[nameof(PlaySound)] = "1";
             baseSection[nameof(SoundVol)] = "5";
-            baseSection[nameof(LineNotify)] = "0";
+            baseSection[nameof(CustomNotify)] = "0";
 
             var fileIniDataParser = new FileIniDataParser();
             fileIniDataParser.WriteFile(settingsFileName, iniData);
@@ -96,8 +96,8 @@ namespace CgLogListener
             baseSection[nameof(CgLogPath)] = CgLogPath;
             baseSection[nameof(PlaySound)] = PlaySound ? "1" : "0";
             baseSection[nameof(SoundVol)] = SoundVol.ToString();
-            baseSection[nameof(LineNotify)] = LineNotify ? "1" : "0";
-            baseSection[nameof(LineTokey)] = LineTokey;
+            baseSection[nameof(CustomNotify)] = CustomNotify ? "1" : "0";
+            baseSection[nameof(CustomNotifier)] = CustomNotifier;
 
             var standardTipData = iniData[settingsStandardTipsSection];
             foreach (var kv in StandardTips)
@@ -146,15 +146,15 @@ namespace CgLogListener
             UpdateConfig();
         }
 
-        internal void SetLineTokey(string value)
+        internal void SetCustomNotifier(string value)
         {
-            LineTokey = value;
+            CustomNotifier = value;
             UpdateConfig();
         }
 
-        internal void SetLineNotify(bool value)
+        internal void SetCustomNotify(bool value)
         {
-            LineNotify = value;
+            CustomNotify = value;
             UpdateConfig();
         }
     }
